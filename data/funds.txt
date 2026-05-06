@@ -1,0 +1,6 @@
+Name: Smith
+Fund: Blackstone Real Estate Partners X
+Strategy: Core-plus real estate across office, industrial, and residential assets
+Minimum investment: $5,000,000
+Target return: 12-15% net IRR
+Risk: Medium — diversified across asset classes but illiquid
