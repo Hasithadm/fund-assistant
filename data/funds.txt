@@ -1,6 +1,26 @@
-Name: Smith
 Fund: Blackstone Real Estate Partners X
 Strategy: Core-plus real estate across office, industrial, and residential assets
 Minimum investment: $5,000,000
 Target return: 12-15% net IRR
 Risk: Medium — diversified across asset classes but illiquid
+Geography: United States, Western Europe
+Fund size: $30 billion
+Manager: Blackstone Inc, founded 1985, New York
+
+Fund: Sequoia Capital Global Growth Fund IV
+Strategy: Late-stage venture and growth equity in technology companies
+Minimum investment: $1,000,000
+Target return: 20-25% net IRR
+Risk: High — concentrated positions in early-to-mid stage tech
+Geography: Global, primarily US and Asia
+Fund size: $8 billion
+Manager: Sequoia Capital, founded 1972, Menlo Park
+
+Fund: Brookfield Infrastructure Fund V
+Strategy: Core infrastructure assets including utilities, transport, and data
+Minimum investment: $10,000,000
+Target return: 10-13% net IRR
+Risk: Low-medium — long duration contracted cash flows
+Geography: Global across OECD countries
+Fund size: $20 billion
+Manager: Brookfield Asset Management, founded 1899, Toronto
