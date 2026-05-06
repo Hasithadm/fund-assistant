@@ -48,4 +48,4 @@ if __name__ == "__main__":
     print(f"Min invest:  ${result.minimum_investment_usd:,}")
     print(f"Summary:     {result.summary}")
     print("\nRaw JSON:")
-    print(result.model_dump_json())
+    print(result.model_dump_json(indent=2))
