@@ -68,7 +68,6 @@ if __name__ == "__main__":
     questions = [
         "What is the minimum investment for Brookfield Infrastructure Fund V?",
         "Which fund has the highest target return?",
-        "What geography does Sequoia focus on?",
     ]
 
     for q in questions:
