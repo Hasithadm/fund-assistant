@@ -10,7 +10,7 @@ Built as a learning project covering:
 - Streamlit UI
 
 ## Stack
-- **LLM** — Google Gemini 2.0 Flash
+- **LLM** — Google Gemini 2.5 Flash
 - **Orchestration** — LangGraph
 - **Vector DB** — ChromaDB
 - **Embeddings** — Gemini Embedding
