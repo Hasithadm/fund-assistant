@@ -137,10 +137,10 @@ if __name__ == "__main__":
     from google.genai.errors import ClientError
 
     questions = [
-        # "What is the minimum investment for Brookfield?",
+        "What is the minimum investment for Brookfield?",
         "Which fund targets the highest return?",
-        # "If I invest $50,000 in Sequoia at 22% for 7 years, what's my return?",
-        # "Tell me about Blackstone's real estate fund",
+        "If I invest $50,000 in Sequoia at 22% for 7 years, what's my return?",
+        "Tell me about Blackstone's real estate fund",
     ]
 
     for q in questions:
