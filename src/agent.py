@@ -5,6 +5,7 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 from tools import search_funds, get_fund_details, calculate_return
+from google.genai.errors import ClientError
 
 load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -12,58 +13,60 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 # --- Tool definitions (tell Gemini what tools exist) ---
 
 TOOLS = [
-    types.Tool(function_declarations=[
-        types.FunctionDeclaration(
-            name="search_funds",
-            description="Search for fund information using a natural language query",
-            parameters=types.Schema(
-                type=types.Type.OBJECT,
-                properties={
-                    "query": types.Schema(
-                        type=types.Type.STRING,
-                        description="Natural language search query about funds"
-                    )
-                },
-                required=["query"]
-            )
-        ),
-        types.FunctionDeclaration(
-            name="get_fund_details",
-            description="Get detailed information about a specific fund by name",
-            parameters=types.Schema(
-                type=types.Type.OBJECT,
-                properties={
-                    "fund_name": types.Schema(
-                        type=types.Type.STRING,
-                        description="The exact or partial name of the fund"
-                    )
-                },
-                required=["fund_name"]
-            )
-        ),
-        types.FunctionDeclaration(
-            name="calculate_return",
-            description="Calculate compound investment return given principal, rate, and years",
-            parameters=types.Schema(
-                type=types.Type.OBJECT,
-                properties={
-                    "principal_usd": types.Schema(
-                        type=types.Type.NUMBER,
-                        description="Initial investment amount in USD"
-                    ),
-                    "annual_rate_percent": types.Schema(
-                        type=types.Type.NUMBER,
-                        description="Annual return rate as a percentage e.g. 12.5"
-                    ),
-                    "years": types.Schema(
-                        type=types.Type.INTEGER,
-                        description="Number of years to hold the investment"
-                    )
-                },
-                required=["principal_usd", "annual_rate_percent", "years"]
-            )
-        )
-    ])
+    types.Tool(
+        function_declarations=[
+            types.FunctionDeclaration(
+                name="search_funds",
+                description="Search for fund information using a natural language query",
+                parameters=types.Schema(
+                    type=types.Type.OBJECT,
+                    properties={
+                        "query": types.Schema(
+                            type=types.Type.STRING,
+                            description="Natural language search query about funds",
+                        )
+                    },
+                    required=["query"],
+                ),
+            ),
+            types.FunctionDeclaration(
+                name="get_fund_details",
+                description="Get detailed information about a specific fund by name",
+                parameters=types.Schema(
+                    type=types.Type.OBJECT,
+                    properties={
+                        "fund_name": types.Schema(
+                            type=types.Type.STRING,
+                            description="The exact or partial name of the fund",
+                        )
+                    },
+                    required=["fund_name"],
+                ),
+            ),
+            types.FunctionDeclaration(
+                name="calculate_return",
+                description="Calculate compound investment return given principal, rate, and years",
+                parameters=types.Schema(
+                    type=types.Type.OBJECT,
+                    properties={
+                        "principal_usd": types.Schema(
+                            type=types.Type.NUMBER,
+                            description="Initial investment amount in USD",
+                        ),
+                        "annual_rate_percent": types.Schema(
+                            type=types.Type.NUMBER,
+                            description="Annual return rate as a percentage e.g. 12.5",
+                        ),
+                        "years": types.Schema(
+                            type=types.Type.INTEGER,
+                            description="Number of years to hold the investment",
+                        ),
+                    },
+                    required=["principal_usd", "annual_rate_percent", "years"],
+                ),
+            ),
+        ]
+    )
 ]
 
 # --- Tool dispatcher ---
@@ -74,6 +77,7 @@ TOOL_MAP = {
     "calculate_return": calculate_return,
 }
 
+
 def run_tool(name: str, args: dict) -> str:
     """Execute whichever tool Gemini chose."""
     print(f"\n  [Tool called] {name}({args})")
@@ -82,7 +86,9 @@ def run_tool(name: str, args: dict) -> str:
         return f"Unknown tool: {name}"
     return fn(**args)
 
+
 # --- Agent loop ---
+
 
 def ask(question: str) -> str:
     """
@@ -99,7 +105,7 @@ def ask(question: str) -> str:
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         config=types.GenerateContentConfig(tools=TOOLS),
-        contents=question
+        contents=question,
     )
     part = response.candidates[0].content.parts[0]
 
@@ -118,14 +124,15 @@ def ask(question: str) -> str:
                 response.candidates[0].content,
                 types.Content(
                     role="tool",
-                    parts=[types.Part(
-                        function_response=types.FunctionResponse(
-                            name=tool_name,
-                            response={"result": tool_result}
+                    parts=[
+                        types.Part(
+                            function_response=types.FunctionResponse(
+                                name=tool_name, response={"result": tool_result}
+                            )
                         )
-                    )]
-                )
-            ]
+                    ],
+                ),
+            ],
         )
         return final_response.text
 
@@ -134,7 +141,6 @@ def ask(question: str) -> str:
 
 
 if __name__ == "__main__":
-    from google.genai.errors import ClientError
 
     questions = [
         "What is the minimum investment for Brookfield?",
