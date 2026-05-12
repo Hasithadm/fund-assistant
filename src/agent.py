@@ -4,7 +4,7 @@ from urllib import response
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
-from tools import search_funds, get_fund_details, calculate_return
+from tools import search_funds, get_fund_details, calculate_return, list_all_funds
 from google.genai.errors import ClientError
 
 load_dotenv()
@@ -44,6 +44,14 @@ TOOLS = [
                 ),
             ),
             types.FunctionDeclaration(
+                name="list_all_funds",
+                description="List all funds available in the database",
+                parameters=types.Schema(
+                    type=types.Type.OBJECT,
+                    properties={},
+                ),
+            ),
+            types.FunctionDeclaration(
                 name="calculate_return",
                 description="Calculate compound investment return given principal, rate, and years",
                 parameters=types.Schema(
@@ -75,6 +83,7 @@ TOOL_MAP = {
     "search_funds": search_funds,
     "get_fund_details": get_fund_details,
     "calculate_return": calculate_return,
+    "list_all_funds": list_all_funds,
 }
 
 
@@ -114,7 +123,7 @@ def ask(question: str) -> str:
         tool_name = part.function_call.name
         tool_args = dict(part.function_call.args)
         tool_result = run_tool(tool_name, tool_args)
-
+        print(f"  [Tool Result] {tool_result}")
         # Turn 2 — send tool result back, get final answer
         final_response = client.models.generate_content(
             model="gemini-2.5-flash",

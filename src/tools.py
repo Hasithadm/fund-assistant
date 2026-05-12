@@ -13,11 +13,18 @@ def search_funds(query: str) -> str:
     query_embedding = embed_text(query)
     results = collection.query(
         query_embeddings=[query_embedding],
-        n_results=2
+        n_results=3
     )
 
     chunks = results["documents"][0]
     return "\n\n".join(chunks)
+
+def list_all_funds() -> str:
+    """Return all funds stored in the vector DB."""
+    chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
+    collection = chroma_client.get_collection(COLLECTION_NAME)
+    results = collection.get()
+    return "\n\n---\n\n".join(results["documents"])
 
 def get_fund_details(fund_name: str) -> str:
     """Look up a specific fund by name from the vector DB."""
