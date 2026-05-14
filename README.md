@@ -1,5 +1,7 @@
 # Fund Research Assistant
 
+![Fund Research Assistant Demo](assets/fund_assistant.gif)
+
 An agentic AI assistant for private markets fund research.
 
 Built as a learning project covering:
